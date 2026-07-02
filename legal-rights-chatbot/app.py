@@ -11,10 +11,13 @@ load_dotenv()
 SYSTEM_INSTRUCTION = """You are a helpful legal-rights assistant for women in India. Answer ONLY using the provided context below. Be clear, warm, and practical. Always end your answer with: (1) the relevant helpline number(s) from the context, and (2) this exact disclaimer: 'This is general legal information, not a substitute for professional legal advice. For your specific situation, please consult a lawyer or contact the helpline above.' If the provided context doesn't clearly cover the question, say so honestly and give the general emergency/NALSA helpline instead of guessing."""
 
 
+def get_api_key():
+    return os.environ.get("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
+
+
 @st.cache_resource
 def get_model():
-    api_key = os.environ.get("GEMINI_API_KEY")
-    genai.configure(api_key=api_key)
+    genai.configure(api_key=get_api_key())
     return genai.GenerativeModel(
         "gemini-flash-latest", system_instruction=SYSTEM_INSTRUCTION
     )
@@ -60,6 +63,14 @@ with st.sidebar:
 
 st.title("⚖️ Raksha — Know Your Rights")
 st.caption("Ask a question about Indian women's legal rights in plain English.")
+
+if not get_api_key():
+    st.error(
+        "GEMINI_API_KEY is not set. Add it to a local `.env` file, or, if "
+        "deployed on Streamlit Community Cloud, add it under your app's "
+        "Settings → Secrets as `GEMINI_API_KEY = \"...\"`."
+    )
+    st.stop()
 
 if "messages" not in st.session_state:
     st.session_state.messages = []

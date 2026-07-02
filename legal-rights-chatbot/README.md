@@ -50,6 +50,24 @@ database or embedding model is needed.
    streamlit run app.py
    ```
 
+## Deploy (Streamlit Community Cloud)
+
+The app is ready to deploy on [Streamlit Community Cloud](https://share.streamlit.io)
+for free:
+
+1. Push this repo to GitHub (already done if you're reading this on GitHub).
+2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
+3. Click **New app**, then select:
+   - Repository: your fork/copy of this repo
+   - Branch: `main`
+   - Main file path: `legal-rights-chatbot/app.py`
+4. Before deploying, open **Advanced settings → Secrets** and add:
+   ```toml
+   GEMINI_API_KEY = "your_key_here"
+   ```
+5. Click **Deploy**. The app reads the key from Streamlit's secrets automatically —
+   no code changes needed.
+
 ## Project structure
 
 ```
